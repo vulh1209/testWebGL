@@ -31,6 +31,7 @@
       var customLoadingBar = document.querySelector("#custom-loader");
       var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var warningBanner = document.querySelector("#unity-warning");
+      var myGameInstance = null;
 
       // Shows a temporary message banner/ribbon for a few seconds, or
       // a permanent error message on top of the canvas if type=='error'.
@@ -92,6 +93,7 @@
         createUnityInstance(canvas, config, (progress) => {
           unitySetLoaderProgressTo(progress);
         }).then((unityInstance) => {
+          myGameInstance = unityInstance;
           loadingScreen.style.display = "none";
           fullscreenButton.onclick = () => {
             unityInstance.SetFullscreen(1);
@@ -101,6 +103,16 @@
         });
       };
       document.body.appendChild(script);
+
+      function onHello(value)
+      {
+        myGameInstance.SendMessage("Main Camera","onHello");
+      }
+
+      function offHello(value)
+      {
+        myGameInstance.SendMessage("Main Camera","offHello");
+      }
 
       // value - 0 to 1
       function unitySetLoaderProgressTo(value)
